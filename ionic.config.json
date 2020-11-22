@@ -1,0 +1,7 @@
+{
+  "name": "TrafficApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

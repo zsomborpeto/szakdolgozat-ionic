@@ -1,0 +1,90 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Szeged Traffic App</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card class="mb-0"> <img src="../../assets//DJI_0902.JPG" /></ion-card>
+
+  <ion-grid class="px-0">
+    <ion-row>
+      <ion-card class="w-100 mb-0" color="primary">
+        <ion-card-content class="p-2 text-center">
+          Hőmérséklet: {{ temperature }}°C
+        </ion-card-content>
+      </ion-card>
+    </ion-row>
+    <ion-card color="light">
+      <div class="bg-white">
+        <ion-row>
+          <ion-card-header class="pt-2 pb-0">
+            <ion-card-subtitle
+              >Jelenlegi forgalom ({{ getRecentDate() }})</ion-card-subtitle
+            >
+          </ion-card-header>
+          <ion-segment
+            color="success"
+            [(ngModel)]="selectedTraffic"
+            (ionChange)="getTrafficData()"
+            [disabled]="loading"
+          >
+            <ion-segment-button value="car">
+              <ion-icon name="car-outline"></ion-icon>
+            </ion-segment-button>
+            <ion-segment-button value="bicycle">
+              <ion-icon name="bicycle-outline"></ion-icon>
+            </ion-segment-button>
+            <ion-segment-button value="pedestrian">
+              <ion-icon name="walk-outline"></ion-icon>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-row>
+      </div>
+      <ion-row>
+        <ion-col>
+          <ion-card class="m-0 h-100 text-center py-2" [color]="getColor(0)">
+            <ion-card-header class="py-0 px-1">
+              <ion-card-subtitle
+                >Belváros felé - {{ getTitle() }}</ion-card-subtitle
+              >
+            </ion-card-header>
+            <ion-card-content class="pt-1 py-0" *ngIf="!loading">
+              {{ getRecent(0) }} - {{ getVolumeOfTraffic(0)}}
+            </ion-card-content>
+            <ion-spinner
+              *ngIf="loading"
+              name="crescent"
+              class="m-auto d-block"
+            ></ion-spinner>
+          </ion-card>
+        </ion-col>
+        <ion-col>
+          <ion-card class="m-0 h-100 text-center py-2" [color]="getColor(1)">
+            <ion-card-header class="py-0 px-1">
+              <ion-card-subtitle
+                >Újszeged felé - {{ getTitle() }}</ion-card-subtitle
+              >
+            </ion-card-header>
+            <ion-card-content class="pt-1 py-0" *ngIf="!loading">
+              {{ getRecent(1) }} - {{ getVolumeOfTraffic(1) }}
+            </ion-card-content>
+            <ion-spinner
+              *ngIf="loading"
+              name="crescent"
+              class="m-auto d-block"
+            ></ion-spinner>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+    <ion-row>
+      <traffic-chart #trafficChart class="m-auto w-100"></traffic-chart>
+    </ion-row>
+  </ion-grid>
+</ion-content>

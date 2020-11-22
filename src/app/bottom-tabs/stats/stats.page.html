@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Szeged Traffic App</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
+  </ion-refresher>
+  <traffic-chart
+    #trafficChartDaily
+    hourly="true"
+    class="m-auto w-100"
+  ></traffic-chart>
+  <traffic-chart
+    #trafficChartHourly
+    daily="true"
+    class="m-auto w-100"
+  ></traffic-chart>
+</ion-content>

@@ -1,0 +1,28 @@
+<ion-card color="light">
+  <div class="bg-white">
+    <ion-card-header class="pt-2 pb-0">
+      <ion-card-subtitle
+        >Várható forgalom {{ getChartRecentDate() }} között
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-segment
+      color="success"
+      [(ngModel)]="direction"
+      (ionChange)="getPredictions()"
+      [disabled]="loading"
+    >
+      <ion-segment-button value="szeged"> Szeged </ion-segment-button>
+      <ion-segment-button value="ujszeged"> Újszeged </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <ion-spinner
+    *ngIf="loading"
+    name="crescent"
+    class="loading-indicator"
+  ></ion-spinner>
+
+  <div>
+    <canvas class="pb-2" height="250" #barCanvas></canvas>
+  </div>
+</ion-card>
