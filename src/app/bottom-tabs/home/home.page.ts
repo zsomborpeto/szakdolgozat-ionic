@@ -53,7 +53,7 @@ export class HomePage {
     public trafficApiService: TrafficApiService,
     public weatherApiService: WeatherApiService
   ) {}
-  
+
   ngOnInit() {
     this.selectedTraffic = "car";
 
@@ -75,10 +75,7 @@ export class HomePage {
         this.findActualTraffic(this.selectedTraffic).toSzeged = toSzeged;
         this.findActualTraffic(this.selectedTraffic).toUjszeged = toUjszeged;
         this.loading = false;
-        if (
-          event &&
-          !this.trafficChart.loading
-        ) {
+        if (event && !this.trafficChart.loading) {
           event.target.complete();
         }
       });

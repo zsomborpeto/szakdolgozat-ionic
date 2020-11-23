@@ -4,6 +4,7 @@ import { TrafficApiService } from "../../service/traffic.api.service";
 import { Chart } from "chart.js";
 import { Traffic } from "../../model/traffic";
 import { TrafficResponse } from "src/app/model/traffic.response";
+import { ChartType } from "src/app/model/chart-type";
 
 @Component({
   selector: "traffic-chart",
@@ -54,7 +55,7 @@ export class TrafficChartComponent {
     }
 
     this.selectedTraffic = "car";
-    this.getPredictions(this.direction);
+    this.getPredictions();
   }
 
   getPredictions(event = null) {
@@ -62,56 +63,19 @@ export class TrafficChartComponent {
       this.barChart.destroy();
     }
 
+    let chartType;
+
     if (this.hourly === "true") {
-      this.getHourPredictions(event);
+      chartType = ChartType.HOUR;
     } else if (this.daily === "true") {
-      this.getDayPredictions(event);
+      chartType = ChartType.DAY;
     } else {
-      this.getTenMinPredictions("car", event);
-      this.getTenMinPredictions("bicycle", event);
-      this.getTenMinPredictions("pedestrian", event);
+      chartType = ChartType.TEN_MINUTE;
     }
-  }
 
-  getTenMinPredictions(type = null, event = null) {
     this.loading = true;
     this.trafficApiService
-      .getActualChartTrafficData(
-        type ? type : this.selectedTraffic,
-        this.direction
-      )
-      .then((traffic: Array<Traffic>) => {
-        this.findActualTraffic(type).traffic = traffic;
-
-        this.createBarChart();
-        this.loading = false;
-        if (event) {
-          event.target.complete();
-        }
-      });
-  }
-
-  getHourPredictions(event = null) {
-    this.loading = true;
-    this.trafficApiService
-      .getHourChartTrafficData(this.direction)
-      .then((traffic: TrafficResponse) => {
-        this.findActualTraffic("car").traffic = traffic.car;
-        this.findActualTraffic("bicycle").traffic = traffic.bicycle;
-        this.findActualTraffic("pedestrian").traffic = traffic.pedestrian;
-
-        this.createBarChart();
-        this.loading = false;
-        if (event) {
-          event.target.complete();
-        }
-      });
-  }
-
-  getDayPredictions(event = null) {
-    this.loading = true;
-    this.trafficApiService
-      .getDayChartTrafficData(this.direction)
+      .getChartTrafficData(this.direction, chartType)
       .then((traffic: TrafficResponse) => {
         this.findActualTraffic("car").traffic = traffic.car;
         this.findActualTraffic("bicycle").traffic = traffic.bicycle;

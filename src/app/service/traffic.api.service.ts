@@ -2,8 +2,8 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { WeatherApiService } from "./weather.api.service";
 import { ApiService } from "./api.service";
-import { Traffic } from "../model/traffic";
-import { TrafficResponse } from '../model/traffic.response';
+import { TrafficResponse } from "../model/traffic.response";
+import { ChartType } from "../model/chart-type";
 
 @Injectable({ providedIn: "root" })
 export class TrafficApiService extends ApiService {
@@ -30,44 +30,11 @@ export class TrafficApiService extends ApiService {
     });
   }
 
-  getActualChartTrafficData(type, direction) {
+  getChartTrafficData(direction: string, type: ChartType) {
     return new Promise((resolve) => {
       this.weatherApiService.getWeatherData().then((temp: Number) => {
         this.http
-          .post<Array<Traffic>>(this.basePath + "/ten-min", {
-            time: new Date(),
-            temp,
-            type,
-            direction,
-          })
-          .subscribe((data: Array<Traffic>) => {
-            resolve(data);
-          });
-      });
-    });
-  }
-
-  getHourChartTrafficData(direction) {
-    return new Promise((resolve) => {
-      this.weatherApiService.getWeatherData().then((temp: Number) => {
-        this.http
-          .post<TrafficResponse>(this.basePath + "/hour", {
-            time: new Date(),
-            temp,
-            direction,
-          })
-          .subscribe((data: TrafficResponse) => {
-            resolve(data);
-          });
-      });
-    });
-  }
-
-  getDayChartTrafficData(direction) {
-    return new Promise((resolve) => {
-      this.weatherApiService.getWeatherData().then((temp: Number) => {
-        this.http
-          .post<TrafficResponse>(this.basePath + "/day", {
+          .post<TrafficResponse>(this.basePath + "/" + type, {
             time: new Date(),
             temp,
             direction,
